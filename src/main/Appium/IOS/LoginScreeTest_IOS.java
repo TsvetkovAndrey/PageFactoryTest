@@ -22,32 +22,43 @@ public class LoginScreeTest_IOS {
     public static final String URL = "https://" + USERNAME + ":" + ACCESS_KEY + "@ondemand.saucelabs.com:443/wd/hub";
     public static IOSDriver driver;
     private LoginScreenPage loginScreenPage;
+    private MainScreenPage mainScreenPage;
+
 
 
     @BeforeClass
     public  void setup() throws MalformedURLException {
 
             DesiredCapabilities caps = DesiredCapabilities.iphone();
-            caps.setCapability("appiumVersion", "1.6.4");
+            caps.setCapability("appiumVersion", "1.7.1");
             caps.setCapability("deviceName","iPhone 7 Simulator");
             caps.setCapability("deviceOrientation", "portrait");
             caps.setCapability("platformVersion","10.2");
             caps.setCapability("platformName", "iOS");
+           // caps.setCapability("autoAcceptAlerts", false);
+          //  caps.setCapability("autoDismissAlerts", true);
+        caps.setCapability("passed","true");
+            caps.setCapability("name","Login-iOS");
             caps.setCapability("browserName", "");
-            caps.setCapability("app","sauce-storage:MOEStudents1.zip");
+            caps.setCapability("app","sauce-storage:MOEStudents.zip");
+
             driver = new IOSDriver(new URL(URL), caps);
             driver.manage().timeouts().implicitlyWait(6, TimeUnit.SECONDS);
             loginScreenPage = new LoginScreenPage(driver);
+            mainScreenPage = new MainScreenPage(driver);
+
     }
 
     @Test( priority = 1 )
     public void TestLoginPositive() throws Exception {
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         loginScreenPage.TestLoginPositive();
+        mainScreenPage.isElementPresent();
 
     }
     @Test( priority = 0 )
     public void TestLoginNegative() throws Exception {
+        driver.switchTo().alert().accept();
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         loginScreenPage.TestLoginNegative();
     }
